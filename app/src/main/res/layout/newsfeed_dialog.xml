@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+   <android.support.v7.widget.CardView
+       android:layout_width="match_parent"
+       android:layout_margin="8dp"
+       android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message "
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your message..."
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/message"
+        android:id="@+id/message_edittext"/>
+
+
+    <Button
+        android:id="@+id/button_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Submit "
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/message_edittext"
+        />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Cancel "
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/message_edittext"
+        android:layout_toLeftOf="@+id/button_post"
+        />
+    </RelativeLayout>
+
+   </android.support.v7.widget.CardView>
+
+</RelativeLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_newsFeed"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="News Feed" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/nav_enquiry"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Enquiries" />
+        <item
+            android:id="@+id/nav_editprofile"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Edit Profile" />
+
+    </group>
+
+    <item android:title="Share">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share App" />
+
+        </menu>
+    </item>
+
+</menu>
