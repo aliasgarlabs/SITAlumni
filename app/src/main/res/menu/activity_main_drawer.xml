@@ -4,19 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_newsFeed"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_dashboard_black_48dp"
             android:title="News Feed" />
         <item
             android:id="@+id/nav_feedback"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_feedback_black_48dp"
             android:title="Feedback" />
         <item
             android:id="@+id/nav_enquiry"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_question_answer_black_48dp"
             android:title="Enquiries" />
         <item
             android:id="@+id/nav_editprofile"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_edit_black_48dp"
             android:title="Edit Profile" />
 
     </group>
@@ -31,4 +31,12 @@
         </menu>
     </item>
 
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_exit_to_app_black_48dp"
+        android:title="Logout" />
+
 </menu>
+
+

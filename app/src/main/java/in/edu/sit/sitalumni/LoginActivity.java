@@ -41,7 +41,6 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
 
-    boolean shouldProceed = false;
     ProgressDialog dialog;
     String date;
     private UserLoginTask mAuthTask = null;
@@ -50,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
     private View mLoginFormView;
-    private CheckBox checkboxStudent;
-    private EditText editTextSchoolName;
     private EditText editTextName;
     private TextView alreadySignUp;
     private TextView gender;
@@ -60,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
     private View inFocusView;
     private TextView birthdate;
     private TextView birthday;
+    private EditText batch;
+    private EditText branch;
+    private EditText programme;
     private RadioButton male, female;
     private Calendar c;
     private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
@@ -74,12 +74,23 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
+
+        if(sharedPreferences.getBoolean("isLogin", false))
+        {
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -88,11 +99,14 @@ public class LoginActivity extends AppCompatActivity {
         gender = (TextView) findViewById(R.id.gender);
         genderGroup = (RadioGroup) findViewById(R.id.genderGroup);
 
-        editTextSchoolName = (EditText) findViewById(R.id.School_Name);
         editTextName = (EditText) findViewById(R.id.Name);
 
         male = (RadioButton) findViewById(R.id.male);
         female = (RadioButton) findViewById(R.id.female);
+
+        batch = (EditText) findViewById(R.id.batch);
+        branch = (EditText) findViewById(R.id.branch);
+        programme = (EditText) findViewById(R.id.programme);
 
         birthdate = (TextView) findViewById(R.id.birthdate);
         birthday = (TextView) findViewById(R.id.birthdayString);
@@ -135,17 +149,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
 
 
-        checkboxStudent = (CheckBox) findViewById(R.id.checkbox_student);
-        editTextSchoolName = (EditText) findViewById(R.id.School_Name);
-        checkboxStudent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    editTextSchoolName.setVisibility(View.VISIBLE);
-                else
-                    editTextSchoolName.setVisibility(View.GONE);
-            }
-        });
 
         alreadySignUp = (TextView) findViewById(R.id.alreadySignUp);
 
@@ -157,9 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!isSignedUp) {
                     isSignedUp = true;
-                    editTextSchoolName.setVisibility(View.GONE);
                     mConfirmPasswordView.setVisibility(View.GONE);
-                    checkboxStudent.setVisibility(View.GONE);
                     gender.setVisibility(View.GONE);
                     male.setVisibility(View.INVISIBLE);
                     female.setVisibility(View.INVISIBLE);
@@ -169,13 +170,13 @@ public class LoginActivity extends AppCompatActivity {
                     alreadySignUp.setText(R.string.notalreadySignUp);
                     birthdate.setVisibility(View.GONE);
                     birthday.setVisibility(View.GONE);
+                    batch.setVisibility(View.GONE);
+                    branch.setVisibility(View.GONE);
+                    programme.setVisibility(View.GONE);
 
                 } else {
                     isSignedUp = false;
-                    editTextSchoolName.setVisibility(View.GONE);
                     mConfirmPasswordView.setVisibility(View.VISIBLE);
-                    checkboxStudent.setVisibility(View.VISIBLE);
-                    checkboxStudent.setChecked(false);
                     male.setVisibility(View.VISIBLE);
                     female.setVisibility(View.VISIBLE);
                     gender.setVisibility(View.VISIBLE);
@@ -186,6 +187,9 @@ public class LoginActivity extends AppCompatActivity {
                     birthdate.setVisibility(View.VISIBLE);
                     birthday.setVisibility(View.VISIBLE);
                     mConfirmPasswordView.setImeActionLabel(getString(R.string.action_sign_up), R.id.login);
+                    batch.setVisibility(View.VISIBLE);
+                    branch.setVisibility(View.VISIBLE);
+                    programme.setVisibility(View.VISIBLE);
                 }
 
 
@@ -234,7 +238,6 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView.setError(null);
         mPasswordView.setError(null);
         editTextName.setError(null);
-        editTextSchoolName.setError(null);
         mConfirmPasswordView.setError(null);
         female.setError(null);
 
@@ -243,10 +246,13 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String confirmPassword = mConfirmPasswordView.getText().toString();
-        String schoolname = editTextSchoolName.getText().toString();
         String name = editTextName.getText().toString();
         String genderString = "";
-        boolean isStudent = checkboxStudent.isChecked();
+
+        String batchString = batch.getText().toString();
+        String branchString = branch.getText().toString();
+        String programmeString = programme.getText().toString();
+
 
 
         boolean cancel = false;
@@ -294,12 +300,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        // Check for a valid school name
-        if (TextUtils.isEmpty(schoolname) && isStudent) {
-            editTextSchoolName.setError(getString(R.string.error_field_required));
-            focusView = editTextSchoolName;
-            cancel = true;
-        }
+
 
         // Check for a valid gender.
         if (!male.isChecked() && !female.isChecked() && !isSignedUp) {
@@ -326,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             // showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, schoolname, isStudent, name, date, genderString);
+            mAuthTask = new UserLoginTask(email, password, name, date, genderString,batchString,branchString,programmeString);
 
             if (isSignedUp) {
 
@@ -353,9 +354,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // Setting Dialog Message
-        alertDialog.setMessage("TERMS AND CONDITIONS\n\n\n" + "Welcome to our App. If you continue to browse and use this App, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern Space Training Adventure ’s relationship with you in relation to this website. If yu disagree with any part of these terms and conditions, please do not use our App.\n" +
+        alertDialog.setMessage("TERMS AND CONDITIONS\n\n\n" + "Welcome to our App. If you continue to browse and use this App, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern SIT Alumni ’s relationship with you in relation to this app. If yu disagree with any part of these terms and conditions, please do not use our App.\n" +
                 "\n" +
-                "The term \"Space Training Adventure\" or ‘us’ or ‘we’ refers to the owner of the App. The term ‘you’ refers to the user or viewer of our App.\n" +
+                "The term \"SIT Alumni\" or ‘us’ or ‘we’ refers to the owner of the App. The term ‘you’ refers to the user or viewer of our App.\n" +
                 "\n" +
                 "The use of this App is subject to the following terms of use:\n" +
                 "\n" +
@@ -370,8 +371,6 @@ public class LoginActivity extends AppCompatActivity {
                 "·      This App contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions.\n" +
                 "\n" +
                 "·      All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.\n" +
-                "\n" +
-                "·      The 3D models are not authorized to be downloaded to your personal devices. Unauthorized use of this App may give rise to a claim for damages and/or be a criminal offence.\n" +
                 "\n" +
                 "·      From time to time, this App may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).\n" +
                 "\n" +
@@ -402,7 +401,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.contains("@sitpune.edu.in");
     }
 
     private boolean isPasswordValid(String password) {
@@ -422,21 +421,20 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        String email, password, schoolName, name;
-        boolean isStudent;
+        String email, password, name, batch, branch, programme;
         String birthday;
         String genderString = "";
 
-        UserLoginTask(String email, String password, String schoolName, boolean isStudent, String name, String birthday, String genderString) {
+        UserLoginTask(String email, String password,  String name, String birthday, String genderString, String batch, String branch, String programme) {
 
             this.email = email;
             this.password = password;
-            this.schoolName = schoolName;
             this.name = name;
-            this.isStudent = isStudent;
             this.genderString = genderString;
             this.birthday = birthday;
-
+            this.batch = batch;
+            this.branch = branch;
+            this.programme = programme;
 
         }
 
@@ -445,7 +443,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
             if (!isSignedUp) {
-                Firebase myFirebaseRef = new Firebase("https://sitalumni.firebaseio.com/users");
+                Firebase myFirebaseRef = new Firebase("https://sitalumni.firebaseio.com/users/");
 
 
                 myFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
@@ -458,19 +456,24 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("uid", uid);
                         editor.putString("name", name);
+                        editor.putString("email", email);
+                        editor.putBoolean("isLogin", true);
                         editor.commit();
 
 
 
-                        Firebase userRef = new Firebase("https://sitalumni.firebaseio.com/users" + uid);
-                        userRef.child("Name").setValue(name);
-                        userRef.child("Email").setValue(email);
-                        userRef.child("Date Of Birth").setValue(birthday);
-                        userRef.child("Gender").setValue(genderString);
+                        Firebase userRef = new Firebase("https://sitalumni.firebaseio.com/users/" + uid);
+                        userRef.child("name").setValue(name);
+                        userRef.child("email").setValue(email);
+                        userRef.child("dob").setValue(birthday);
+                        userRef.child("gender").setValue(genderString);
+
+                        userRef.child("batch").setValue(batch);
+                        userRef.child("branch").setValue(branch);
+                        userRef.child("programme").setValue(programme);
 
 
-                        if (isStudent)
-                            userRef.child("School").setValue(schoolName);
+
                         //Signed Up
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -492,6 +495,10 @@ public class LoginActivity extends AppCompatActivity {
                 myFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isLogin", true);
+                        editor.commit();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();

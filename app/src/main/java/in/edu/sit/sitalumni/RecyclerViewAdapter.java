@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    private List<Feed> feedList;
+    private List<Newsfeed> feedList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, date, message;
@@ -24,7 +24,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public RecyclerViewAdapter(List<Feed> feedList) {
+    public RecyclerViewAdapter(List<Newsfeed> feedList) {
         this.feedList = feedList;
     }
 
@@ -38,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Feed movie = feedList.get(position);
+        Newsfeed movie = feedList.get(position);
         holder.name.setText(movie.getName());
         holder.date.setText(movie.getDate());
         holder.message.setText(movie.getMessage());
